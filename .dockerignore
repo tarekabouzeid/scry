@@ -1,0 +1,16 @@
+# Keep the build context small and secret-free: the Dockerfiles `COPY . .`,
+# so anything not excluded here ends up inside the images.
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+.git
+.github
+.env
+.env.*
+!.env.example
+!.env.keycloak.example
+*.log
+backups

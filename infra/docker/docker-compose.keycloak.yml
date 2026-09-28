@@ -1,0 +1,43 @@
+# Optional overlay: a local Keycloak for trying the OIDC sign-in without
+# your own identity provider. For demos and development only; a real
+# install uses your organisation's provider.
+#
+# Usage (from the repo root):
+#   docker compose -f infra/docker/docker-compose.yml \
+#                   -f infra/docker/docker-compose.keycloak.yml up -d
+# then copy .env.keycloak.example values into .env (or `cp
+# .env.keycloak.example .env` on a fresh checkout) and restart the api.
+#
+# Runs in `start-dev` mode with an embedded database — fine for a demo,
+# not for production. The realm is imported once from realm-export.json
+# on first boot; delete the scry-keycloak-data volume to re-import after
+# editing it.
+name: scry
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.4
+    restart: unless-stopped
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Browser-facing URLs (authorization_endpoint, verification_uri, ...) are
+      # pinned to the host-published address so a browser on the host can
+      # always reach them. Back-channel URLs (token/jwks/userinfo/device),
+      # which the api container calls itself, stay dynamic so they resolve to
+      # whatever host the api used to reach Keycloak (the `keycloak` service
+      # name on the compose network) instead of inheriting the pinned one.
+      KC_HOSTNAME: http://localhost:8080
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - scry-keycloak-data:/opt/keycloak/data
+    # Loopback only: the admin console has well-known credentials (admin/admin).
+    ports:
+      - "127.0.0.1:8080:8080"
+
+volumes:
+  scry-keycloak-data:

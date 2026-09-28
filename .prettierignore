@@ -1,0 +1,4 @@
+pnpm-lock.yaml
+packages/db/migrations/meta/
+# Go template syntax inside .yaml, not parseable as plain YAML.
+infra/helm/

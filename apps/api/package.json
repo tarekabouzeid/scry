@@ -1,0 +1,48 @@
+{
+  "name": "@scry/api",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.0",
+    "@nestjs/common": "^12.0.0",
+    "@nestjs/config": "^12.0.1",
+    "@nestjs/core": "^12.0.0",
+    "@nestjs/platform-express": "^12.0.0",
+    "@nestjs/swagger": "^12.0.2",
+    "@nestjs/throttler": "^6.7.1",
+    "@scry/db": "workspace:*",
+    "@scry/shared": "workspace:*",
+    "ai": "^7.0.0",
+    "bullmq": "^6.3.9",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "cookie-parser": "^1.4.7",
+    "drizzle-orm": "^0.45.3",
+    "ioredis": "^6.0.0",
+    "jose": "^6.2.12",
+    "nodemailer": "^10.0.0",
+    "openid-client": "^6.8.8",
+    "postgres": "^3.4.9",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.0",
+    "@nestjs/testing": "^12.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.0.0",
+    "@types/nodemailer": "^8.0.2",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.2"
+  }
+}

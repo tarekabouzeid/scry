@@ -1,0 +1,235 @@
+{
+  "realm": "scry",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "clients": [
+    {
+      "clientId": "scry-web",
+      "name": "Scry",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "scry-dev-client-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://localhost:3001/auth/callback"],
+      "webOrigins": ["+"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3000"
+      },
+      "protocolMappers": [
+        {
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "email",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "email",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "employee_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "employee_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "employee_id",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "scry-llm",
+      "name": "Scry → LLM gateway (demo)",
+      "description": "Service account Scry uses for the 'JWT from your IdP' AI auth mode (OAuth2 client credentials).",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "scry-llm-demo-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "attributes": {
+        "access.token.lifespan": "300"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "alice",
+      "email": "alice@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Alice",
+      "lastName": "Chen",
+      "attributes": {
+        "employee_id": ["E-1001"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "alice123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "dan",
+      "email": "dan@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Daniel",
+      "lastName": "Kim",
+      "attributes": {
+        "employee_id": ["E-1008"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "dan123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "bob",
+      "email": "bob@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Bob",
+      "lastName": "Martinez",
+      "attributes": {
+        "employee_id": ["E-1002"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "bob123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "sam",
+      "email": "sam@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Sam",
+      "lastName": "Okafor",
+      "attributes": {
+        "employee_id": ["E-1007"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "sam123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "carol",
+      "email": "carol@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Carol",
+      "lastName": "Nguyen",
+      "attributes": {
+        "employee_id": ["E-1003"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "carol123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "priya",
+      "email": "priya@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Priya",
+      "lastName": "Shah",
+      "attributes": {
+        "employee_id": ["E-1004"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "priya123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "lena",
+      "email": "lena@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Lena",
+      "lastName": "Vogel",
+      "attributes": {
+        "employee_id": ["E-1005"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "lena123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "omar",
+      "email": "omar@example.com",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Omar",
+      "lastName": "Haddad",
+      "attributes": {
+        "employee_id": ["E-1006"]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "omar123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "service-account-scry-llm",
+      "enabled": true,
+      "serviceAccountClientId": "scry-llm"
+    }
+  ]
+}

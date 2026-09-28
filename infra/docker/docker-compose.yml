@@ -1,0 +1,45 @@
+# Local dev infra: Postgres (pgvector) and Valkey (Redis-compatible).
+# apps/api and apps/web run natively via `pnpm dev` against these (see the
+# README's Development section). The whole stack in containers is
+# docker-compose.prod.yml.
+name: scry
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg18
+    # Parallel index builds (the HNSW vector index) need more than the 64 MB default.
+    shm_size: 1g
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scry}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-scry}
+      POSTGRES_DB: ${POSTGRES_DB:-scry}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # Postgres 18 images keep their data in a versioned folder under here.
+      - scry-postgres-data:/var/lib/postgresql
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scry}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    # Valkey: the BSD-licensed, Redis-compatible store (queues, rate limits, caches).
+    image: valkey/valkey:9.0-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - scry-redis-data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  scry-postgres-data:
+  scry-redis-data:

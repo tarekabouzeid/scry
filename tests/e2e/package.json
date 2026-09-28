@@ -1,0 +1,23 @@
+{
+  "name": "@scry/e2e",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "End-to-end suites that run against a live Scry stack (see README).",
+  "scripts": {
+    "test:e2e": "node scripts/run.mjs",
+    "test:api": "vitest run --config vitest.config.ts",
+    "test:ui": "playwright test",
+    "stack": "node scripts/stack.mjs",
+    "typecheck": "tsc --noEmit",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^24.0.0",
+    "jose": "^6.2.12",
+    "postgres": "^3.4.9",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.2"
+  }
+}

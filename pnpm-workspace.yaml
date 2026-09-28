@@ -1,0 +1,10 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tests/*"
+
+# Packages allowed to run install scripts; scarf is only telemetry.
+allowBuilds:
+  "@scarf/scarf": false
+  esbuild: true
+  msgpackr-extract: true

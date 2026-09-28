@@ -1,0 +1,96 @@
+# See the README's Kubernetes section for a walkthrough. This chart bundles
+# single-replica Postgres and Valkey (Redis) via a plain Deployment + PVC for a
+# self-contained install — fine for small-scale self-hosting, but for a
+# production cluster consider postgres.enabled: false / redis.enabled:
+# false and pointing DATABASE_URL / REDIS_URL at managed instances instead.
+
+image:
+  # Build and push apps/api/Dockerfile and apps/web/Dockerfile to your own
+  # registry first. Postgres is the stock pgvector image (postgres.image).
+  registry: ghcr.io/your-org
+  tag: latest
+  pullPolicy: IfNotPresent
+
+api:
+  # More than one is fine: rate limits and AI-settings changes are shared
+  # through Redis, and the vector index build takes a lock.
+  replicas: 2
+  port: 3001
+  # Background jobs (embeddings, TL;DRs) run in every replica too.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
+
+web:
+  replicas: 2
+  port: 3000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+ingress:
+  # The browser calls the API directly (NEXT_PUBLIC_API_URL, baked in at
+  # build time) rather than through a Next.js proxy, so web and api need
+  # separate hosts, not a shared host with path-based routing.
+  enabled: false
+  className: ""
+  webHost: scry.example.com
+  apiHost: api.scry.example.com
+  annotations: {}
+  tls: []
+
+postgres:
+  enabled: true
+  image: pgvector/pgvector:0.8.6-pg18
+  storage: 10Gi
+  storageClassName: ""
+  # Fine for tens of thousands of initiatives. Around a million (with
+  # 1536-dimension embeddings: ~6 GB of vectors, ~3 GB of HNSW index) give
+  # it ~8 GB of RAM and 50Gi+ of storage, or use a managed Postgres with
+  # pgvector (postgres.enabled: false).
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+
+redis:
+  enabled: true
+  # Valkey: BSD-licensed and Redis-compatible (BullMQ, rate limits, pub/sub).
+  image: valkey/valkey:9.0-alpine
+  storage: 2Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  storageClassName: ""
+
+# Non-secret env vars merged into the api/web ConfigMap (e.g. NODE_ENV,
+# NOTIFICATIONS_CRON, OIDC_ISSUER_URL). See .env.example at the repo root
+# for the full list. Worth setting on a cluster:
+#   TRUST_PROXY: "1"          behind the ingress, so rate limits see client IPs
+#   LLM_ALLOWED_HOSTS: "..."  pin where AI traffic may go (e.g. litellm.ai.svc:4000)
+#   ORG_UNITS / COUNTRIES     the org units and countries teams choose from
+#   INITIAL_ADMIN_EMAILS      who is made admin on first sign-in (set before anyone signs in)
+# The AI model itself is connected after install, in Admin → AI & models.
+env: {}
+
+# Name of a pre-created Secret holding DATABASE_URL, REDIS_URL,
+# SESSION_SECRET, OIDC_CLIENT_SECRET, SETTINGS_ENCRYPTION_KEY (encrypts the
+# AI credentials admins save; set it so SESSION_SECRET can rotate), etc.
+# Preferred for production over the `secrets` block below.
+existingSecret: ""
+
+# Rendered into a Secret if existingSecret is empty — a convenience for
+# getting started. Pass via --set or a values file that's never committed,
+# never left in values.yaml itself.
+secrets: {}

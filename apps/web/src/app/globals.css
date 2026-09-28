@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+/*
+ * Tailwind reads its theme from here (v4 has no tailwind.config). Colours
+ * point at the RGB-triplet tokens below, so light, dark and print only
+ * re-point the tokens. Shadows use differently named tokens: a theme
+ * variable that refers to itself would be a cycle.
+ */
+@theme {
+  --color-background: rgb(var(--background));
+  --color-surface: rgb(var(--surface));
+  --color-elevated: rgb(var(--elevated));
+  --color-border: rgb(var(--border));
+  --color-border-strong: rgb(var(--border-strong));
+  --color-foreground: rgb(var(--foreground));
+  --color-muted: rgb(var(--muted));
+  --color-subtle: rgb(var(--subtle));
+  --color-accent: rgb(var(--accent));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-warning: rgb(var(--warning));
+  --color-status-idea: rgb(var(--status-idea));
+  --color-status-planned: rgb(var(--status-planned));
+  --color-status-progress: rgb(var(--status-progress));
+  --color-status-blocked: rgb(var(--status-blocked));
+  --color-status-shipped: rgb(var(--status-shipped));
+  --color-status-cancelled: rgb(var(--status-cancelled));
+
+  /* System font stacks — no external fetch at build time, so this builds
+     the same behind a self-hoster's firewall as it does anywhere else. */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --shadow-glow: 0 0 0 1px rgb(var(--accent) / 0.3), 0 2px 8px -2px rgb(var(--accent) / 0.4);
+  --shadow-card: var(--card-shadow);
+  --shadow-pop: var(--pop-shadow);
+
+  --background-image-accent-gradient: linear-gradient(
+    135deg,
+    rgb(var(--accent)) 0%,
+    rgb(var(--accent-2)) 100%
+  );
+
+  --animate-fade-in: fade-in 220ms ease-out both;
+  --animate-slide-in-right: slide-in-right 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-shimmer: shimmer 1.8s linear infinite;
+  --animate-typing-dot: typing-dot 1.2s ease-in-out infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes typing-dot {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+      transform: translateY(0);
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* v3 defaults the screens were designed with: v4 made borders currentColor
+   and buttons an arrow cursor. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+:root {
+  /* Dark by default: a restrained dev-tool palette (Linear/Raycast/Obsidian),
+     not neon-everywhere. The light theme below re-points the same tokens. */
+  --background: 9 9 13; /* near-black, faint blue */
+  --surface: 16 16 22;
+  --elevated: 22 22 30;
+  --border: 36 36 46;
+  /* Shadows are theme tokens: the dark theme's deep shadows looked like
+     smudges on light surfaces. */
+  --card-shadow: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --pop-shadow: 0 24px 64px -16px rgb(0 0 0 / 0.75), 0 0 0 1px rgb(var(--border));
+  --border-strong: 54 54 68;
+  --foreground: 236 236 241;
+  --muted: 148 148 163;
+  --subtle: 128 128 144; /* >= 4.5:1 on background, surface and elevated */
+  --accent: 129 140 248; /* indigo */
+  --accent-2: 56 189 248; /* cyan — gradient partner */
+  --warning: 251 191 36;
+
+  --status-idea: 161 161 181;
+  --status-planned: 96 165 250;
+  --status-progress: 167 139 250;
+  --status-blocked: 248 113 113;
+  --status-shipped: 52 211 153;
+  --status-cancelled: 113 113 122;
+
+  color-scheme: dark;
+}
+
+/* Light theme: same tokens, re-pointed. Applied when the user picks Light, or
+   picks System on a light-mode OS (see lib/theme.ts — sets data-theme). */
+:root[data-theme="light"] {
+  --background: 248 248 251;
+  --surface: 255 255 255;
+  --elevated: 241 241 246;
+  --border: 226 226 234;
+  --card-shadow: 0 1px 2px 0 rgb(15 15 30 / 0.05), 0 4px 12px -8px rgb(15 15 30 / 0.12);
+  --pop-shadow: 0 12px 32px -12px rgb(15 15 30 / 0.18), 0 0 0 1px rgb(var(--border));
+  --border-strong: 205 205 216;
+  --foreground: 22 22 30;
+  --muted: 88 88 104;
+  --subtle: 104 104 120; /* >= 4.5:1 on white and elevated */
+  --accent: 79 70 229;
+  --accent-2: 8 145 178;
+  --warning: 180 83 9;
+
+  --status-idea: 100 100 120;
+  --status-planned: 37 99 235;
+  --status-progress: 124 58 237;
+  --status-blocked: 220 38 38;
+  --status-shipped: 5 150 105;
+  --status-cancelled: 113 113 122;
+
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Paper is white: print (and "Save as PDF") always uses the light palette,
+   whatever the screen theme. */
+@media print {
+  :root,
+  :root[data-theme="light"],
+  :root[data-theme="dark"] {
+    --background: 255 255 255;
+    --surface: 255 255 255;
+    --elevated: 241 241 246;
+    --border: 214 214 222;
+    --border-strong: 190 190 202;
+    --foreground: 17 17 24;
+    --muted: 72 72 86;
+    --subtle: 104 104 120;
+    --accent: 79 70 229;
+    --accent-2: 8 145 178;
+    --warning: 180 83 9;
+    --status-idea: 100 100 120;
+    --status-planned: 37 99 235;
+    --status-progress: 124 58 237;
+    --status-blocked: 220 38 38;
+    --status-shipped: 5 150 105;
+    --status-cancelled: 113 113 122;
+    --card-shadow: none;
+    --pop-shadow: none;
+    color-scheme: light;
+  }
+  html,
+  body {
+    height: auto;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+}
+
+body {
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings:
+    "cv11" 1,
+    "ss01" 1;
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.35);
+}
+
+/* Thin, unobtrusive scrollbars that match the surface palette. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--border-strong)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--border-strong));
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Faint dotted grid used behind hero/empty surfaces. */
+@utility bg-grid {
+  background-image: radial-gradient(rgb(var(--border-strong) / 0.55) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(135deg, rgb(var(--foreground)) 30%, rgb(var(--accent)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--elevated)) 0%,
+    rgb(var(--border)) 50%,
+    rgb(var(--elevated)) 100%
+  );
+  background-size: 200% 100%;
+  @apply animate-shimmer rounded-md;
+}
+
+@utility focus-ring {
+  @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}

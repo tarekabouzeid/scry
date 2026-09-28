@@ -1,0 +1,31 @@
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+*.tsbuildinfo
+*.log
+.env
+.env.local
+.DS_Store
+
+# Redis snapshots from local runs
+*.rdb
+
+# e2e runs
+tests/e2e/.stack/
+tests/e2e/test-results/
+tests/e2e/playwright-report/
+
+# Copied from docs/ at build time (apps/web/scripts/copy-guide.mjs)
+apps/web/public/guide/
+
+# Database backups (infra/docker/backup.sh)
+backups/
+
+# Local Claude Code notes and worktrees
+.claude/pr-*.md
+.claude/worktrees/
+
+# Local-only manual browser checks, never published
+tests/e2e/manual/

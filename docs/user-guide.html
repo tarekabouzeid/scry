@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scry user guide</title>
+    <meta
+      name="description"
+      content="How to use Scry: register initiatives, check for existing work, handle overlaps and follow what other teams are building."
+    />
+    <style>
+      :root {
+        --bg: #ffffff;
+        --surface: #f6f6f9;
+        --border: #e2e2ea;
+        --text: #16161e;
+        --muted: #55556a;
+        --accent: #4f46e5;
+        --accent-soft: #eef0ff;
+        --warn: #b45309;
+        --shot-border: #d6d6e0;
+        color-scheme: light;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b0b10;
+          --surface: #15151c;
+          --border: #26262f;
+          --text: #ececf1;
+          --muted: #9a9aad;
+          --accent: #8b93f8;
+          --accent-soft: #1b1c33;
+          --warn: #fbbf24;
+          --shot-border: #2e2e3a;
+          color-scheme: dark;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.6 ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+      }
+      header {
+        margin-bottom: 32px;
+      }
+      .eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 6px;
+      }
+      h1 {
+        font-size: 34px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        margin: 0 0 12px;
+      }
+      .lead {
+        font-size: 18px;
+        color: var(--muted);
+        margin: 0;
+        max-width: 640px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 28px 0 8px;
+        padding: 0;
+        list-style: none;
+      }
+      .toc a {
+        display: inline-block;
+        padding: 6px 12px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 14px;
+        color: var(--text);
+        text-decoration: none;
+        background: var(--surface);
+      }
+      .toc a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      section {
+        padding-top: 40px;
+        margin-top: 40px;
+        border-top: 1px solid var(--border);
+      }
+      h2 {
+        font-size: 24px;
+        letter-spacing: -0.01em;
+        line-height: 1.3;
+        margin: 0 0 8px;
+      }
+      h2 .n {
+        color: var(--accent);
+        font-variant-numeric: tabular-nums;
+        margin-right: 8px;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 28px 0 6px;
+      }
+      p {
+        margin: 0 0 12px;
+      }
+      ul,
+      ol {
+        margin: 0 0 12px;
+        padding-left: 22px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      a {
+        color: var(--accent);
+      }
+      strong {
+        font-weight: 600;
+      }
+      kbd {
+        display: inline-block;
+        min-width: 22px;
+        padding: 1px 6px;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        background: var(--surface);
+        font:
+          12px/1.5 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace;
+        text-align: center;
+      }
+      figure {
+        margin: 20px 0 8px;
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--shot-border);
+        border-radius: 10px;
+      }
+      figcaption {
+        font-size: 14px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .split {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      @media (min-width: 720px) {
+        .split {
+          grid-template-columns: 1fr 1fr;
+        }
+        .split.narrow-img {
+          grid-template-columns: 220px 1fr;
+        }
+      }
+      .split figure {
+        margin: 0;
+      }
+      .split.narrow-img figure img {
+        max-width: 256px;
+      }
+      .tip {
+        border-left: 3px solid var(--accent);
+        background: var(--accent-soft);
+        padding: 10px 14px;
+        border-radius: 0 8px 8px 0;
+        font-size: 15px;
+        margin: 16px 0;
+      }
+      .tip.warn {
+        border-left-color: var(--warn);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+        margin: 8px 0 12px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      th {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      td:first-child {
+        white-space: nowrap;
+      }
+      footer {
+        margin-top: 56px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        font-size: 14px;
+        color: var(--muted);
+      }
+      @media print {
+        .toc {
+          display: none;
+        }
+        section {
+          break-inside: avoid-page;
+        }
+        figure {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">User guide</p>
+        <h1>Scry</h1>
+        <p class="lead">
+          One place where every team shares what it's building or thinking about, so you find
+          related work before you start, and two teams don't build the same thing.
+        </p>
+        <nav aria-label="Contents">
+          <ul class="toc">
+            <li><a href="#around">Getting around</a></li>
+            <li><a href="#add">Add an initiative</a></li>
+            <li><a href="#ask">Ask Scry</a></li>
+            <li><a href="#overlaps">Overlaps and demand</a></li>
+            <li><a href="#views">Views</a></li>
+            <li><a href="#brief">The brief</a></li>
+            <li><a href="#updates">Staying up to date</a></li>
+            <li><a href="#teams">Your team</a></li>
+            <li><a href="#admins">For admins</a></li>
+            <li><a href="#keys">Shortcuts</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <section id="around">
+        <h2><span class="n">1</span>Getting around</h2>
+        <div class="split narrow-img">
+          <figure>
+            <img
+              src="screenshots/guide-sidebar.png"
+              alt="The sidebar: New initiative at the top, then Initiatives, Board, Timeline, Graph, Brief and Ask Scry"
+              width="256"
+              height="520"
+            />
+          </figure>
+          <div>
+            <ul>
+              <li>
+                <strong>New initiative</strong> is the main action, at the top of the sidebar.
+              </li>
+              <li>
+                <strong>Initiatives, Board, Timeline, Graph</strong> are four ways to look at the
+                same work.
+              </li>
+              <li><strong>Brief</strong> is a one-page summary for leadership.</li>
+              <li>
+                <strong>Ask Scry</strong> answers questions such as "is anyone already doing this?".
+                Your recent questions are listed below it.
+              </li>
+              <li>
+                <strong>Jump to…</strong> (top of the page, or <kbd>⌘</kbd> <kbd>K</kbd>) finds any
+                initiative, team or page. Anything you type there can also go to Ask Scry.
+              </li>
+            </ul>
+            <p>
+              Every page, filter and open initiative is in the address bar, so you can share a link
+              to exactly what you see.
+            </p>
+            <p>
+              New to Scry? A short tour starts on your first visit. Replay it any time from the
+              <strong>Help</strong> button at the top right, which also opens this guide and the
+              keyboard shortcuts.
+            </p>
+          </div>
+        </div>
+        <figure>
+          <img
+            src="screenshots/guide-jump-to.png"
+            alt="Jump to, with a matching initiative and the option to ask Scry"
+            width="640"
+            height="300"
+          />
+          <figcaption>Jump to finds the initiative, or sends your words to Ask Scry.</figcaption>
+        </figure>
+      </section>
+
+      <section id="add">
+        <h2><span class="n">2</span>Add an initiative</h2>
+        <p>
+          Click <strong>New initiative</strong> or press <kbd>C</kbd>. An initiative can be an idea
+          or work already under way. Register it early, when it's still cheap to join forces.
+        </p>
+        <p>It's filed under your team with you as the contact; admins can choose another team.</p>
+        <h3>Let AI fill it in</h3>
+        <p>
+          Describe the idea in your own words and click <strong>Draft</strong>. Scry fills in the
+          title, summary, tags and tier using only what you wrote, and reuses tags your organisation
+          already uses. <strong>Undo</strong> puts the form back, and <strong>Stop</strong> cancels
+          a draft that's taking too long.
+        </p>
+        <figure>
+          <img
+            src="screenshots/guide-new-initiative.png"
+            alt="The New initiative form filled in by AI from a short description"
+            width="1440"
+            height="900"
+          />
+          <figcaption>
+            Drafted from two sentences. The line under the summary shows whether it says what it is,
+            who it's for and why it matters.
+          </figcaption>
+        </figure>
+        <h3>Check it's new</h3>
+        <p>
+          As you type, Scry looks for similar work other teams have registered. A close match shows
+          the team, its status and who to talk to. If it's the same thing, talk to them before
+          building a second one. You can still create yours if it's different.
+        </p>
+        <figure>
+          <img
+            src="screenshots/guide-similar-work.png"
+            alt="The form warning that Passkeys for customer login may already exist"
+            width="768"
+            height="520"
+          />
+        </figure>
+        <h3>Make it clearer</h3>
+        <p>
+          <strong>Suggest improvements</strong> reviews what you wrote and proposes a clearer title,
+          summary, tier or missing tags. Nothing changes until you click <strong>Use</strong>.
+        </p>
+        <h3>The TL;DR</h3>
+        <p>
+          Every initiative gets a one-line TL;DR, written by AI, saying what it is and where it
+          stands: on hold and why, which other teams build on it, and who else needs it. It updates
+          when those change. You'll see it at the top of the details panel and in lists.
+        </p>
+        <figure>
+          <img
+            src="screenshots/guide-tldr.png"
+            alt="The details panel with the TL;DR above the full summary"
+            width="432"
+            height="420"
+            style="max-width: 432px"
+          />
+        </figure>
+        <div class="tip">
+          Prefer a spreadsheet? <strong>Import</strong> (on the Initiatives page) takes a CSV or a
+          Jira export and shows a preview before anything is created.
+        </div>
+      </section>
+
+      <section id="ask">
+        <h2><span class="n">3</span>Ask Scry before you build</h2>
+        <p>
+          Describe an idea in plain words, as you would to a colleague. Scry follows the whole
+          conversation: it searches when you describe an idea or change it, answers questions about
+          what it found, and shows what it's doing as it works. It searches every team's work by
+          meaning, not just keywords, shows what it searched for under the answer, and answers with
+          one of three outcomes:
+        </p>
+        <ul>
+          <li>
+            <strong>Strong match:</strong> it already exists. Scry names the team and the person to
+            talk to.
+          </li>
+          <li>
+            <strong>Related:</strong> something similar exists. Check it, then register yours if
+            it's different.
+          </li>
+          <li>
+            <strong>Nothing found:</strong> click <strong>Register this idea</strong> and Scry
+            drafts it from the conversation.
+          </li>
+        </ul>
+        <p>
+          Once Scry has searched for your idea you can register it; it offers
+          <strong>Register this idea</strong> when the idea is clear, or whenever you ask. If it's
+          still vague, Scry asks what would change and for whom, but it's your call.
+        </p>
+        <figure>
+          <img
+            src="screenshots/ask-scry.png"
+            alt="Ask Scry finds that passwordless login is already being built by Identity & Security"
+            width="1440"
+            height="900"
+          />
+          <figcaption>Each answer shows the initiatives it's based on.</figcaption>
+        </figure>
+      </section>
+
+      <section id="overlaps">
+        <h2><span class="n">4</span>Overlaps and demand</h2>
+        <h3>Possible duplicates</h3>
+        <p>
+          When two teams' initiatives look like the same work, both are flagged with a
+          <strong>possible overlap</strong> card. Choose one:
+        </p>
+        <ul>
+          <li>
+            <strong>Related, not the same</strong> if they're different work the two teams should
+            know about.
+          </li>
+          <li>
+            <strong>Merge</strong> the duplicate into the one that carries on. Its history,
+            followers and links move across. Only a flagged duplicate can be merged. If the one that
+            carries on isn't yours, this asks its owners and team admins: they see
+            <strong>Merge</strong> and <strong>Decline</strong>
+            on it, and nothing changes until one of them accepts. You can
+            <strong>Withdraw</strong> the request meanwhile. Admins merge straight away. Either way,
+            both teams are notified.
+          </li>
+          <li><strong>Not a duplicate</strong>, if they only look alike.</li>
+        </ul>
+        <figure>
+          <img
+            src="screenshots/overlap.png"
+            alt="An 87% overlap between two teams' dashboards, with Related, Merge and Not a duplicate"
+            width="1440"
+            height="900"
+          />
+        </figure>
+        <h3>"We need this too"</h3>
+        <p>
+          If another team's initiative matters to you, open it and click
+          <strong>We need this too</strong>, with a short note on why. Work that several teams need
+          is worth building once, together, and it shows up in the brief. A request nobody has
+          confirmed for six months fades there; <strong>Still needed</strong> confirms it.
+        </p>
+        <figure>
+          <img
+            src="screenshots/demand.png"
+            alt="Payments and Growth say they need the Feature store, and why"
+            width="1440"
+            height="900"
+          />
+        </figure>
+        <h3>Other teams' work</h3>
+        <p>
+          In an initiative's details, <strong>Add</strong> under <em>Other teams' work</em> says how
+          it connects to another team's initiative: it <strong>builds on</strong> it,
+          <strong>replaces</strong> it, or is <strong>related</strong>. These tell teams who to talk
+          to; they don't say what waits on what, which stays in each team's own tracker.
+          Relationships always connect different teams, and there's one per pair.
+        </p>
+        <p>
+          If work is paused, set its status to <strong>On hold</strong> and say why. Teams that
+          build on it see the reason.
+        </p>
+      </section>
+
+      <section id="views">
+        <h2><span class="n">5</span>Views</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">View</th>
+              <th scope="col">Use it to</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Initiatives</strong></td>
+              <td>
+                Search and filter everything. Sort by title, status, target date or last update by
+                clicking the column name; long lists load 50 at a time with
+                <strong>Load more</strong>. Save a filtered view to the sidebar with
+                <strong>Views</strong>, and switch to compact rows to see more at once.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Board</strong></td>
+              <td>
+                See work by status or by team. Drag your own cards to change their status (<kbd
+                  >Alt</kbd
+                >
+                + arrow keys work too), with Undo. Busy columns show the first 50; use
+                <strong>Show more</strong> for the rest.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Timeline</strong></td>
+              <td>
+                See who ships what, and when. Overlapping work that also overlaps in time is
+                highlighted.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Graph</strong></td>
+              <td>
+                The whole organisation as a map: one circle per team, sized by its work, with a line
+                where teams' work is related (hover a line to read it). Zoom in, or click a team,
+                and its circle opens to show its initiatives, with work related to other teams on
+                the edge facing them. Use <strong>Go to an initiative</strong> or
+                <strong>Or go to a team</strong> to jump there, or search by meaning. A very big
+                team shows its 200 most connected and recent initiatives; the Initiatives list has
+                the rest.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="split">
+          <figure>
+            <img
+              src="screenshots/board.png"
+              alt="The board, grouped by team"
+              width="1440"
+              height="900"
+            />
+            <figcaption>Board, grouped by team.</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="screenshots/graph.png"
+              alt="Graph search for passwordless login, highlighting the passkeys work and what builds on it"
+              width="1440"
+              height="900"
+            />
+            <figcaption>Graph, searched for "passwordless login".</figcaption>
+          </figure>
+        </div>
+        <p>
+          Click any initiative to open its details on the right. Drag the panel's edge to make it
+          wider.
+        </p>
+      </section>
+
+      <section id="brief">
+        <h2><span class="n">6</span>The brief</h2>
+        <p>
+          <strong>Brief</strong> is one page for leadership on what needs a decision: possible
+          duplicates, work several teams want that nobody has picked up, work others build on that
+          is on hold or has gone quiet, the themes teams are starting on separately, and what
+          changed. Choose a period and, if you like, one part of the organisation.
+        </p>
+        <ul>
+          <li>
+            The summary at the top and every figure come straight from the data, with or without AI.
+          </li>
+          <li>
+            <strong>Reword with AI</strong> rewrites the summary. Each point links to the
+            initiatives behind it. Check it before you share it.
+          </li>
+          <li>
+            <strong>Print or save PDF</strong> for a clean document, or
+            <strong>Copy as text</strong> for an email.
+          </li>
+        </ul>
+        <figure>
+          <img
+            src="screenshots/brief.png"
+            alt="The portfolio brief: its summary and the decisions it asks for"
+            width="1440"
+            height="900"
+          />
+        </figure>
+      </section>
+
+      <section id="updates">
+        <h2><span class="n">7</span>Staying up to date</h2>
+        <ul>
+          <li>
+            The <strong>bell</strong> is your inbox: overlaps with your work, other teams building
+            on it, merges and requests to merge into your work, comments, status changes and "we
+            need this too".
+          </li>
+          <li>
+            <strong>Follow</strong> a team, a tag or a single initiative (the bell icon on an
+            initiative, or <strong>Settings → Following</strong>) to hear about it too.
+          </li>
+          <li>
+            Each initiative has a <strong>Discussion</strong> for comments and a
+            <strong>History</strong> of every change.
+          </li>
+          <li>
+            <strong>Settings → API tokens</strong> gives you a token for scripts. Tokens are read
+            only unless you choose <strong>Read and write</strong>.
+          </li>
+        </ul>
+        <h3>Ask Scry from your AI tools</h3>
+        <p>
+          Once an admin turns it on, you can ask Scry from Claude, Cursor, VS Code and other AI
+          assistants and coding agents, as yourself and read only: "is anyone already building
+          this?", "what is Payments working on?". <strong>Settings → AI tools</strong> shows the
+          address. In Claude Code:
+        </p>
+        <pre><code>claude mcp add --transport http scry https://&lt;your scry api&gt;/mcp</code></pre>
+        <p>
+          In other tools, add a remote (HTTP) MCP server with that address. The first time, the tool
+          opens Scry: sign in and click <strong>Allow read access</strong>. It can search and read
+          initiatives, teams, relationships and the brief, but never change anything. What it asks
+          is logged with your name for your admins, and you can <strong>Disconnect</strong> it any
+          time in Settings. A tool that can't sign in this way can send a read-only API token
+          instead.
+        </p>
+      </section>
+
+      <section id="teams">
+        <h2><span class="n">8</span>Your team</h2>
+        <p>
+          The first time you sign in, <strong>ask to join</strong> your team, or
+          <strong>create a team</strong> (choosing its org unit and country from your organisation's
+          list). While you wait, you can look around but not change anything; a banner says what
+          you're waiting for, and <strong>Withdraw</strong> lets you choose again.
+        </p>
+        <ul>
+          <li>A team's <strong>team admins</strong> let people in. An admin approves new teams.</li>
+          <li>
+            If you created the team, you're its first team admin. Team admins see a
+            <strong>Team</strong> page in the sidebar, with a count of people waiting.
+          </li>
+          <li>
+            On the Team page: let people in or decline them, remove members, make others team admins
+            (a team keeps at least one), and see the team's audit log.
+          </li>
+          <li>Team admins can edit any of their team's initiatives.</li>
+        </ul>
+        <figure>
+          <img
+            src="screenshots/team.png"
+            alt="The Team page: someone asking to join, the members, and the team's audit log"
+            width="1440"
+            height="900"
+          />
+        </figure>
+      </section>
+
+      <section id="admins">
+        <h2><span class="n">9</span>For admins</h2>
+        <p>
+          Admins aren't in a team: they see and run everything. The <strong>Admin</strong> page has
+          a setup checklist until the basics are done. When an admin adds an initiative, they choose
+          its <strong>owner</strong>, and it goes to that person's team.
+        </p>
+        <ul>
+          <li>
+            <strong>AI &amp; models:</strong> connect an AI provider (any OpenAI-compatible
+            endpoint), pick a model for each job, and click <strong>Test connection</strong>.
+            Without a model, Scry still works, but Ask Scry, duplicate detection, the TL;DR and the
+            AI writing help are off. Usage figures are on the same page.
+          </li>
+          <li>
+            <strong>People:</strong> move people between teams, make someone a team admin, and make
+            someone an admin. Keep at least two admins.
+          </li>
+          <li>
+            <strong>Teams:</strong> approve or decline new teams, decide requests to join, create
+            and rename teams, or merge two teams into one. Org units and countries come from the
+            <code>ORG_UNITS</code> and <code>COUNTRIES</code> settings.
+          </li>
+          <li>
+            <strong>AI tools:</strong> let people ask Scry from their AI assistants (MCP). It's off
+            until you turn it on, because what Scry returns goes to that tool's AI provider. The
+            same page shows who uses it, from which tools, every call (kept for 90 days by default),
+            and can disconnect someone's tools.
+          </li>
+          <li><strong>Import:</strong> bring in a roadmap from CSV or Jira.</li>
+          <li>
+            <strong>Audit log:</strong> who changed roles, teams, team admins, AI settings, AI
+            tools, tokens and imports, and when.
+          </li>
+        </ul>
+        <figure>
+          <img
+            src="screenshots/ai-settings.png"
+            alt="Admin, AI and models, with the setup checklist and usage figures"
+            width="1440"
+            height="900"
+          />
+        </figure>
+        <div class="tip warn">
+          AI features only use what's in Scry and what people type. They never change an initiative
+          on their own: drafts and suggestions wait for someone to accept them.
+        </div>
+      </section>
+
+      <section id="keys">
+        <h2><span class="n">10</span>Keyboard shortcuts</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Keys</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><kbd>C</kbd></td>
+              <td>New initiative</td>
+            </tr>
+            <tr>
+              <td><kbd>⌘</kbd> <kbd>K</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd></td>
+              <td>Jump to an initiative, team or page, or ask Scry</td>
+            </tr>
+            <tr>
+              <td><kbd>?</kbd></td>
+              <td>Show the keyboard shortcuts</td>
+            </tr>
+            <tr>
+              <td><kbd>Esc</kbd></td>
+              <td>Close the details panel or a dialog</td>
+            </tr>
+            <tr>
+              <td><kbd>⌘</kbd> <kbd>Enter</kbd></td>
+              <td>Draft with AI, in the New initiative form</td>
+            </tr>
+            <tr>
+              <td><kbd>Alt</kbd> <kbd>←</kbd> <kbd>→</kbd></td>
+              <td>Move the selected board card to the next column</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        Screenshots show the built-in demo company. Your teams, people and initiatives will differ.
+      </footer>
+    </main>
+  </body>
+</html>

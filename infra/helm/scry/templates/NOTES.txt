@@ -1,0 +1,28 @@
+Scry has been deployed.
+
+IMPORTANT — NEXT_PUBLIC_API_URL is baked into the web image at build time
+(Next.js inlines it into the client bundle), not read from this chart's
+ConfigMap at runtime. Build apps/web/Dockerfile with:
+
+  docker build -f apps/web/Dockerfile \
+    --build-arg NEXT_PUBLIC_API_URL=https://{{ .Values.ingress.apiHost }} \
+    -t {{ .Values.image.registry }}/scry-web:{{ .Values.image.tag }} .
+
+matching whatever host you set for ingress.apiHost — if these don't match,
+the browser will call the wrong API origin and every request will fail
+with a CORS or connection error.
+
+{{- if .Values.ingress.enabled }}
+
+Web:  https://{{ .Values.ingress.webHost }}
+API:  https://{{ .Values.ingress.apiHost }}
+{{- else }}
+
+Ingress is disabled — port-forward to reach the app:
+  kubectl port-forward svc/{{ .Release.Name }}-scry-web {{ .Values.web.port }}:{{ .Values.web.port }}
+  kubectl port-forward svc/{{ .Release.Name }}-scry-api {{ .Values.api.port }}:{{ .Values.api.port }}
+{{- end }}
+
+The scry-api and scry-web images (under image.registry) aren't published
+anywhere: build and push both from this repo before installing. Postgres
+and Valkey use their stock images.

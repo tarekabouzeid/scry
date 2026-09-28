@@ -1,0 +1,22 @@
+# Optional overlay: a local LiteLLM proxy for multi-provider LLM routing.
+# One option among several — Scry can equally talk to OpenAI, Azure OpenAI,
+# a local Ollama or vLLM directly.
+#
+# Usage:
+#   docker compose -f infra/docker/docker-compose.prod.yml \
+#                   -f infra/docker/docker-compose.litellm.yml up -d --build
+# Configure infra/docker/litellm.config.yaml with your provider credentials,
+# then connect http://litellm:4000/v1 in Scry under Admin → AI & models
+# (API key, or JWT auth — see the README's "AI & models" section).
+name: scry
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:v1.103.0
+    restart: unless-stopped
+    env_file: ../../.env
+    volumes:
+      - ./litellm.config.yaml:/app/config.yaml:ro
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    ports:
+      - "127.0.0.1:4000:4000"

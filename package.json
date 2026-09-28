@@ -1,0 +1,32 @@
+{
+  "name": "scry",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Self-hostable initiative graph agent for cross-team visibility",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.6.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "demo:llm": "node infra/docker/demo-llm/server.mjs",
+    "test:e2e": "pnpm --filter @scry/e2e test:e2e",
+    "screenshots": "pnpm --filter @scry/e2e screenshots"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.0",
+    "typescript": "~6.0.3",
+    "prettier": "^3.9.9",
+    "eslint": "^10.11.0",
+    "@eslint/js": "^10.0.1",
+    "typescript-eslint": "^8.70.0"
+  }
+}
