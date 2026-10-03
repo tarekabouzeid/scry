@@ -4,6 +4,8 @@ Scry is a shared register of what every team is building or planning, so
 people find related work before they start and two teams don't build the
 same thing.
 
+![A short tour of Scry: the register, an overlap, demand, the board, the graph, Ask Scry and the brief](docs/screenshots/demo.gif)
+
 ![Every initiative across every team, with a possible overlap flagged](docs/screenshots/initiatives.png)
 
 Teams record their initiatives (ideas, plans and work in progress) in one

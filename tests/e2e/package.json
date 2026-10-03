@@ -10,7 +10,8 @@
     "test:ui": "playwright test",
     "stack": "node scripts/stack.mjs",
     "typecheck": "tsc --noEmit",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "demo-gif": "node scripts/demo-gif.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
